@@ -1,4 +1,10 @@
 /*!
+ * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.com)
+ * Copyright 2011-2017 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/*!
  * FitVids 1.1
  *
  * Copyright 2013, Chris Coyier - http://css-tricks.com + Dave Rupert - http://daverupert.com
@@ -61,3 +67,5 @@ Copyright © 2011-2016 Caleb Troughton
 Licensed under the MIT license.
 https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 */
+
+/*! tether 2.0.0-beta.5 */
