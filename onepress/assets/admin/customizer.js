@@ -408,7 +408,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "react-dom/client");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom_client__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _repeatable_RepeatableControlApp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./repeatable/RepeatableControlApp */ "./src/admin/customizer/repeatable/RepeatableControlApp.jsx");
 /* harmony import */ var _repeatable_repeatable_media_bridge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./repeatable/repeatable-media-bridge */ "./src/admin/customizer/repeatable/repeatable-media-bridge.js");
 /**
@@ -462,7 +463,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "react-dom/client");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom_client__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _icon_picker_IconPickerApp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./icon-picker/IconPickerApp */ "./src/admin/customizer/icon-picker/IconPickerApp.jsx");
 /* harmony import */ var _icon_picker_injectFontLinks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./icon-picker/injectFontLinks */ "./src/admin/customizer/icon-picker/injectFontLinks.js");
 /**
@@ -7843,40 +7845,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
-/***/ "./node_modules/react-dom/client.js"
-/*!******************************************!*\
-  !*** ./node_modules/react-dom/client.js ***!
-  \******************************************/
-(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var m = __webpack_require__(/*! react-dom */ "react-dom");
-if (false) // removed by dead control flow
-{} else {
-  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
-  exports.createRoot = function(c, o) {
-    i.usingClientEntryPoint = true;
-    try {
-      return m.createRoot(c, o);
-    } finally {
-      i.usingClientEntryPoint = false;
-    }
-  };
-  exports.hydrateRoot = function(c, h, o) {
-    i.usingClientEntryPoint = true;
-    try {
-      return m.hydrateRoot(c, h, o);
-    } finally {
-      i.usingClientEntryPoint = false;
-    }
-  };
-}
-
-
-/***/ },
-
 /***/ "react"
 /*!************************!*\
   !*** external "React" ***!
@@ -7888,7 +7856,7 @@ module.exports = window["React"];
 
 /***/ },
 
-/***/ "react-dom"
+/***/ "react-dom/client"
 /*!***************************!*\
   !*** external "ReactDOM" ***!
   \***************************/

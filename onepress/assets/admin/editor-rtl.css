@@ -48,10 +48,6 @@ input,
 textarea {
   font: inherit;
 }
-::-moz-selection {
-  background: #000000;
-  color: #FFFFFF;
-}
 ::selection {
   background: #000000;
   color: #FFFFFF;
