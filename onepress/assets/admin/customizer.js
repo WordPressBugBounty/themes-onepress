@@ -955,6 +955,18 @@ function initModalEditors(api, $) {
                   $(window).resize();
                 }, 600);
               });
+
+              // The initial click can request a resize before
+              // TinyMCE has measured its toolbar and status bar.
+              // Recalculate once its UI is mounted and laid out.
+              var resize_editor = function () {
+                control._resize();
+              };
+              if (window.requestAnimationFrame) {
+                window.requestAnimationFrame(resize_editor);
+              } else {
+                window.setTimeout(resize_editor, 0);
+              }
             }
           });
         }
@@ -980,16 +992,22 @@ function initModalEditors(api, $) {
       _resize: function () {
         var control = this;
         var w = $('#wp-' + control.editor_id + '-wrap');
-        var height = w.innerHeight();
-        var tb_h = w.find('.mce-toolbar-grp').eq(0).height();
-        tb_h += w.find('.wp-editor-tools').eq(0).height();
-        tb_h += 50;
-        //var width = $( window ).width();
         var editor = tinymce.get(control.editor_id);
         if (editor) {
+          var wrap_height = w.get(0).getBoundingClientRect().height;
+          var tools = w.find('.wp-editor-tools').eq(0).get(0);
+          var tools_height = tools ? tools.getBoundingClientRect().height : 0;
+          var container_height = Math.max(100, wrap_height - tools_height);
+          var editor_container = w.find('.wp-editor-container').eq(0).get(0);
+          var edit_area = w.find('.mce-edit-area').eq(0).get(0);
+          var chrome_height = editor_container && edit_area ? Math.max(0, editor_container.getBoundingClientRect().height - edit_area.getBoundingClientRect().height) : 0;
+          var visual_height = Math.max(100, container_height - chrome_height);
           control.editing_editor.width('');
-          editor.theme.resizeTo('100%', height - tb_h);
-          w.find('textarea.wp-editor-area').height(height - tb_h);
+          // resizeTo() sets the iframe height, not the complete
+          // TinyMCE container. Reserve its toolbar/status chrome plus
+          // the WordPress editor tabs so both modes fit the panel.
+          editor.theme.resizeTo('100%', visual_height);
+          w.find('textarea.wp-editor-area').height(container_height);
         }
       }
     };
@@ -1183,6 +1201,21 @@ function RepeatableControlApp({
   const limitedMsg = control.params.limited_msg || '';
   const idKey = control.params.id_key || '';
   const dragFrom = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
+  const rowKeys = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(new WeakMap());
+  const nextRowKey = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(0);
+
+  // Storage ids can be editable fields (for example, Plus custom-section
+  // `section_id`). Keep React identity separate so typing into an id field
+  // does not remount the row, collapse it, and move focus to the document.
+  const getRowKey = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(row => {
+    let key = rowKeys.current.get(row);
+    if (!key) {
+      nextRowKey.current += 1;
+      key = `row-${nextRowKey.current}`;
+      rowKeys.current.set(row, key);
+    }
+    return key;
+  }, []);
 
   // Sync hidden input + setting only if payload differs from WP (avoids false “dirty” on load).
   // Note: wp.customize.Value#set ignores a second-arg “silent”; every set marks the setting dirty.
@@ -1209,12 +1242,13 @@ function RepeatableControlApp({
     setItems(prev => {
       const prevRow = prev[index];
       const nextRow = typeof updater === 'function' ? updater(prevRow) : updater;
+      rowKeys.current.set(nextRow, getRowKey(prevRow));
       const next = prev.slice();
       next[index] = nextRow;
       commit(next);
       return next;
     });
-  }, [commit]);
+  }, [commit, getRowKey]);
   const onRemove = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(index => {
     setItems(prev => {
       const next = prev.filter((_, i) => i !== index);
@@ -1292,15 +1326,17 @@ function RepeatableControlApp({
     }
   }, [items.length, maxItem, limitedMsg, control.container]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, items.map((row, index) => {
+    const rowKey = getRowKey(row);
     const itemKey = idKey && row[idKey] ? String(row[idKey]) : `idx-${index}`;
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RepeatableItem__WEBPACK_IMPORTED_MODULE_3__.RepeatableItem, {
-      key: itemKey,
+      key: rowKey,
       $: $,
       control: control,
       fieldIds: fieldIds,
       fields: fields,
       index: index,
       itemKey: itemKey,
+      rowKey: rowKey,
       row: row,
       setRow: setRow,
       onRemove: onRemove,
@@ -1439,6 +1475,7 @@ function RepeatableItem({
   fields,
   index,
   itemKey,
+  rowKey,
   row,
   setRow,
   onRemove,
@@ -1516,7 +1553,7 @@ function RepeatableItem({
     return () => {
       $('body').trigger('repeat-control-remove-item', [$ctx]);
     };
-  }, [$, itemKey]);
+  }, [$, rowKey]);
   const toggle = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(e => {
     e.preventDefault();
     setExpanded(x => !x);

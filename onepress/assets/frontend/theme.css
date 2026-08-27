@@ -12486,9 +12486,11 @@ div.wpforms-container .wpforms-form button[type=submit] {
           .wp-block[data-align="full"] { max-width: none; }
       }
 
-  Block-specific visual rules (`.wp-block-*`) can use the bare class
-  because the class is specific enough to scope itself; both contexts
-  match without prefix gymnastics.
+	Block-specific visual rules (`.wp-block-*`) can use the bare class
+	because the class is specific enough to scope itself; both contexts
+	match without prefix gymnastics. Keep theme defaults at class-level
+	specificity and avoid `!important` so spacing authored by a block can
+	override the fallback through its inline style or generated layout rule.
 
   Iframe body class injection (e.g. setting
   `editor_settings['body_class'] = 'entry-content'`) is intentionally
@@ -12504,15 +12506,10 @@ div.wpforms-container .wpforms-form button[type=submit] {
   margin-right: auto;
 }
 .single-post .right-sidebar .content-inner {
-  margin-left: 0px;
+  margin-left: 0;
 }
 .single-post .left-sidebar .content-inner {
-  margin-right: 0px;
-}
-.entry-content ul,
-.entry-content ol {
-  margin: 1.5em auto;
-  list-style-position: outside;
+  margin-right: 0;
 }
 .wp-block-list li {
   margin-left: 1em;
@@ -12521,24 +12518,9 @@ div.wpforms-container .wpforms-form button[type=submit] {
 .wp-block-list li li {
   margin-left: 2.5em;
 }
-.wp-block-list li ol, .wp-block-list li ul {
-  margin-top: 0px;
-  margin-left: 0px;
-}
-.entry-content li {
-  margin-left: 2.5em;
-  margin-bottom: 6px;
-}
-.entry-content ul ul,
-.entry-content ol ol,
-.entry-content ul ol,
-.entry-content ol ul {
-  margin: 0 auto;
-}
-.entry-content ul ul li,
-.entry-content ol ol li,
-.entry-content ul ol li,
-.entry-content ol ul li {
+.wp-block-list li ol,
+.wp-block-list li ul {
+  margin-top: 0;
   margin-left: 0;
 }
 /*--------------------------------------------------------------
@@ -12585,6 +12567,38 @@ div.wpforms-container .wpforms-form button[type=submit] {
   `.editor-styles-wrapper` (editor-only) or `.entry-content`
   (already shipped). Nothing leaks to bare element selectors.
   --------------------------------------------------------------*/
+.entry-content ul,
+.entry-content ol,
+.editor-styles-wrapper ul,
+.editor-styles-wrapper ol {
+  margin: 1.5em auto;
+  list-style-position: outside;
+}
+.entry-content li,
+.editor-styles-wrapper li {
+  margin-left: 0;
+  margin-bottom: 6px;
+}
+.entry-content ul ul,
+.entry-content ol ol,
+.entry-content ul ol,
+.entry-content ol ul,
+.editor-styles-wrapper ul ul,
+.editor-styles-wrapper ol ol,
+.editor-styles-wrapper ul ol,
+.editor-styles-wrapper ol ul {
+  margin: 0 auto;
+}
+.entry-content ul ul li,
+.entry-content ol ol li,
+.entry-content ul ol li,
+.entry-content ol ul li,
+.editor-styles-wrapper ul ul li,
+.editor-styles-wrapper ol ol li,
+.editor-styles-wrapper ul ol li,
+.editor-styles-wrapper ol ul li {
+  margin-left: 0;
+}
 .editor-styles-wrapper blockquote {
   padding: 30px;
   position: relative;
@@ -12594,27 +12608,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
 }
 .editor-styles-wrapper blockquote p {
   margin: 0;
-}
-.editor-styles-wrapper ul,
-.editor-styles-wrapper ol {
-  margin: 1.5em auto;
-  list-style-position: outside;
-}
-.editor-styles-wrapper li {
-  margin-left: 2.5em;
-  margin-bottom: 6px;
-}
-.editor-styles-wrapper ul ul,
-.editor-styles-wrapper ol ol,
-.editor-styles-wrapper ul ol,
-.editor-styles-wrapper ol ul {
-  margin: 0 auto;
-}
-.editor-styles-wrapper ul ul li,
-.editor-styles-wrapper ol ol li,
-.editor-styles-wrapper ul ol li,
-.editor-styles-wrapper ol ul li {
-  margin-left: 0;
 }
 .editor-styles-wrapper code,
 .editor-styles-wrapper pre {
@@ -12648,12 +12641,45 @@ div.wpforms-container .wpforms-form button[type=submit] {
   below targets a specific block class so child themes can override
   individually.
 
+  WordPress serializes authored margin/padding values on the block wrapper
+  and emits block-gap layout rules with greater specificity. The spacing
+  below is therefore only OnePress's legacy fallback for blocks that have
+  no authored setting. This mirrors Astra/Kadence's compatibility pattern:
+  expose spacing controls in theme.json while retaining established theme
+  rhythm for existing posts.
+
   Alignment overrides (.alignwide / .alignfull) that only matter in
   the editor canvas (which is iframe-constrained) are scoped inside
   `.editor-styles-wrapper` to avoid changing frontend layout.
   --------------------------------------------------------------*/
-.wp-block-image {
-  margin: 1.5em auto;
+.wp-block-image,
+.wp-block-gallery,
+.wp-block-pullquote,
+.wp-block-cover,
+.wp-block-columns,
+.wp-block-group,
+.wp-block-table,
+.wp-block-embed,
+.wp-block-code,
+.wp-block-preformatted {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+.wp-block-image,
+.wp-block-gallery,
+.wp-block-cover,
+.wp-block-table,
+.wp-block-embed {
+  margin-left: auto;
+  margin-right: auto;
+}
+.wp-block-pullquote,
+.wp-block-columns,
+.wp-block-group,
+.wp-block-code,
+.wp-block-preformatted {
+  margin-left: 0;
+  margin-right: 0;
 }
 .wp-block-image img {
   display: block;
@@ -12679,9 +12705,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
 .wp-block-image.aligncenter {
   margin-left: auto;
   margin-right: auto;
-}
-.wp-block-gallery {
-  margin: 1.5em auto;
 }
 .wp-block-gallery .wp-block-image figcaption {
   font-size: 12px;
@@ -12719,7 +12742,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
 .wp-block-pullquote {
   border-top: 4px solid currentColor;
   border-bottom: 4px solid currentColor;
-  margin: 1.5em 0;
   padding: 3em 0;
   text-align: center;
   font-style: italic;
@@ -12743,7 +12765,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
   padding: 3em 1.5em;
 }
 .wp-block-cover {
-  margin: 1.5em auto;
   min-height: 300px;
 }
 .wp-block-cover .wp-block-cover__inner-container,
@@ -12755,7 +12776,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
   font-size: 1.5em;
 }
 .wp-block-columns {
-  margin: 1.5em 0;
   gap: 30px;
 }
 @media (max-width: 991px) {
@@ -12766,14 +12786,8 @@ div.wpforms-container .wpforms-form button[type=submit] {
 .wp-block-column {
   margin-bottom: 30px;
 }
-.wp-block-group {
-  margin: 1.5em 0;
-}
 .wp-block-group.has-background {
   padding: 1.5em;
-}
-.wp-block-table {
-  margin: 1.5em auto;
 }
 .wp-block-table table {
   border-collapse: collapse;
@@ -12810,9 +12824,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
   font-size: 30px;
   letter-spacing: 1em;
 }
-.wp-block-embed {
-  margin: 1.5em auto;
-}
 .wp-block-embed.is-type-video .wp-block-embed__wrapper {
   position: relative;
   padding-top: 56.25%;
@@ -12837,7 +12848,6 @@ div.wpforms-container .wpforms-form button[type=submit] {
   border-radius: 2px;
   overflow-x: auto;
   line-height: 1.5;
-  margin: 1.5em 0;
 }
 .wp-block-spacer {
   display: block;
@@ -12894,11 +12904,9 @@ div.wpforms-container .wpforms-form button[type=submit] {
   margin-right: calc(50% - 50vw);
   clear: both;
 }
-.entry-content > .alignleft,
 .entry-content > .wp-block.alignleft {
   margin-left: calc(50% - 50vw);
 }
-.entry-content > .alignright,
 .entry-content > .wp-block.alignright {
   margin-right: calc(50% - 50vw);
 }
@@ -12953,6 +12961,14 @@ div.wpforms-container .wpforms-form button[type=submit] {
   float: right;
   margin: 0 0 1em 1.5em;
   max-width: 50%;
+}
+.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .wp-block[data-align=left],
+.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .wp-block.alignleft {
+  margin-left: max(0px, (100% - var(--wp--style--global--content-size, 1110px)) / 2);
+}
+.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .wp-block[data-align=right],
+.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .wp-block.alignright {
+  margin-right: max(0px, (100% - var(--wp--style--global--content-size, 1110px)) / 2);
 }
 .editor-styles-wrapper .wp-block-code,
 .editor-styles-wrapper .wp-block-preformatted {
