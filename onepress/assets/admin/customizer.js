@@ -1160,8 +1160,8 @@ __webpack_require__.r(__webpack_exports__);
  * Core Value#set no-ops when _.isEqual(from, to) — e.g. object vs same JSON string
  * — leaving _dirty false so refresh preview / changeset never see the edit.
  *
- * @param {jQuery} $ jQuery
- * @param {object} control wp.customize.Control instance
+ * @param {jQuery} $       jQuery
+ * @param {Object} control wp.customize.Control instance
  * @param {string} payload JSON string for the setting
  */
 function pushRepeatablePayloadToCustomizer($, control, payload) {

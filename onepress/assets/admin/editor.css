@@ -1043,6 +1043,7 @@ body.mce-content-body {
   `.editor-styles-wrapper` (editor-only) or `.entry-content`
   (already shipped). Nothing leaks to bare element selectors.
   --------------------------------------------------------------*/
+/* stylelint-disable no-descending-specificity */
 .entry-content ul,
 .entry-content ol,
 .editor-styles-wrapper ul,
@@ -1075,6 +1076,7 @@ body.mce-content-body {
 .editor-styles-wrapper ol ul li {
   margin-left: 0;
 }
+/* stylelint-enable no-descending-specificity */
 .editor-styles-wrapper blockquote {
   padding: 30px;
   position: relative;
@@ -1190,7 +1192,7 @@ body.mce-content-body {
 }
 .wp-block-button .wp-block-button__link {
   background-color: var(--wp--preset--color--primary, #03c4eb);
-  color: #ffffff;
+  color: #fff;
   padding: 12px 24px;
   font-weight: 600;
   font-size: 13px;
@@ -1203,7 +1205,7 @@ body.mce-content-body {
 }
 .wp-block-button .wp-block-button__link:hover, .wp-block-button .wp-block-button__link:focus {
   background-color: var(--wp--preset--color--secondary, #00aeef);
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 .wp-block-button.is-style-outline .wp-block-button__link {
@@ -1213,11 +1215,11 @@ body.mce-content-body {
 }
 .wp-block-button.is-style-outline .wp-block-button__link:hover, .wp-block-button.is-style-outline .wp-block-button__link:focus {
   background-color: var(--wp--preset--color--primary, #03c4eb);
-  color: #ffffff;
+  color: #fff;
 }
 .wp-block-pullquote {
-  border-top: 4px solid currentColor;
-  border-bottom: 4px solid currentColor;
+  border-top: 4px solid currentcolor;
+  border-bottom: 4px solid currentcolor;
   padding: 3em 0;
   text-align: center;
   font-style: italic;
@@ -1245,7 +1247,7 @@ body.mce-content-body {
 }
 .wp-block-cover .wp-block-cover__inner-container,
 .wp-block-cover .wp-block-cover-text {
-  color: #ffffff;
+  color: #fff;
   padding: 1.5em;
 }
 .wp-block-cover .wp-block-cover-text {
@@ -1284,7 +1286,7 @@ body.mce-content-body {
 .wp-block-separator {
   margin: 3em auto;
   border: none;
-  border-bottom: 2px solid currentColor;
+  border-bottom: 2px solid currentcolor;
   max-width: 100px;
 }
 .wp-block-separator.is-style-wide {
@@ -1355,6 +1357,7 @@ body.mce-content-body {
   cap at content-size — invisible on default sites (container is already
   ~1110px) but narrows hand-coded oversized content on fullwidth templates.
   --------------------------------------------------------------*/
+/* stylelint-disable-next-line @stylistic/max-line-length */
 .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
   max-width: var(--wp--style--global--content-size, 1110px);
   margin-left: auto;
@@ -1386,8 +1389,8 @@ body.mce-content-body {
 .entry-content > .wp-block.alignright {
   margin-right: calc(50% - 50vw);
 }
-.entry-content > .wp-block-image.alignfull img,
 .entry-content > .alignfull img,
+.entry-content > .wp-block-image.alignfull img,
 .entry-content > .wp-block-cover.alignfull,
 .entry-content > .wp-block-cover.alignfull .wp-block-cover__inner-container {
   width: 100%;
@@ -1404,6 +1407,7 @@ body.mce-content-body {
   Specificity: `.editor-styles-wrapper` + a wp-block class is enough
   to beat Gutenberg's stock alignment CSS without `!important`.
   --------------------------------------------------------------*/
+/* stylelint-disable no-duplicate-selectors, no-descending-specificity */
 .editor-styles-wrapper .wp-block:not([data-align=wide]):not([data-align=full]):not([data-align=left]):not([data-align=right]):not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright) {
   max-width: var(--wp--style--global--content-size, 1110px);
   margin-left: auto;
@@ -1450,5 +1454,6 @@ body.mce-content-body {
 .editor-styles-wrapper .wp-block-preformatted {
   border: 0;
 }
+/* stylelint-enable no-duplicate-selectors, no-descending-specificity */
 
 /*# sourceMappingURL=editor.css.map*/
